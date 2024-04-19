@@ -13,3 +13,4 @@ media
 !.vscode/extensions.json 
 .history
 .env*
+classRooms/migrations/*
