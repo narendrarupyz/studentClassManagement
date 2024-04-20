@@ -5,6 +5,8 @@ from classRooms.serializers import ClassRoomSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from student.models import Student
+from student.serializers import StudentSerializer
 
 # Create your views here.
 
@@ -49,3 +51,15 @@ class ClassRoomDetails(APIView):
         classroom = self.get_object(class_room_number)
         classroom.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ClassRoomWithStudents(APIView):
+    def get(self, request, class_room_number):
+        try:
+            classroom = ClassRoom.objects.get(
+                class_room_number=class_room_number)
+
+            class_room_data = ClassRoomSerializer(classroom)
+            return Response(class_room_data.data, status=status.HTTP_200_OK)
+        except ClassRoom.DoesNotExist:
+            return Response({'error': 'class does not exist'}, status=status.HTTP_404_NOT_FOUND)
